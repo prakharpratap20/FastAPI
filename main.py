@@ -19,10 +19,7 @@ BANDS = [
         {"title": "The Dark Side of the Moon", "release_date": "1973-03-01"},
         {"title": "Wish You Were Here", "release_date": "1975-09-12"},
     ]},
-    {"id": 6, "name": "The Doors", "genre": "Rock", "albums": [
-        {"title": "The Doors", "release_date": "1967-01-04"},
-        {"title": "Strange Days", "release_date": "1967-09-25"},
-    ]},
+    {"id": 6, "name": "The Doors", "genre": "Rock"},
     {"id": 7, "name": "Queen", "genre": "Rock", "albums": [
         {"title": "A Night at the Opera", "release_date": "1975-11-21"},
         {"title": "A Day at", "release_date": "1976-12-10"},
@@ -32,8 +29,18 @@ BANDS = [
 
 
 @app.get("/bands")
-async def bands() -> list[Band]:
-    return [Band(**b) for b in BANDS]
+async def bands(
+    genre: GenreURLChoices | None = None,
+    has_albums: bool = False
+) -> list[Band]:
+    band_list = [Band(**b) for b in BANDS]
+    if genre:
+        band_list = [
+            b for b in band_list if b.genre.lower() == genre.value
+        ]
+    if has_albums:
+        band_list = [b for b in band_list if len(b.albums) > 0]
+    return band_list
 
 
 @app.get("/bands/{band_id}")
