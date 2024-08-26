@@ -5,6 +5,9 @@ from functools import wraps
 # The check_value_range decorator will check if the value of the argument is
 # within the specified range.
 def check_value_range(func):
+    """
+    Check if the value of the argument is within the specified range.
+    """
     @wraps(func)
     def wrapped(x):
         type_hints = get_type_hints(func, include_extras=True)
@@ -20,13 +23,3 @@ def check_value_range(func):
         # execute the original function
         return func(x)
     return wrapped
-
-
-# Annotated is a generic type that allows you to add metadata to a type hint.return
-@check_value_range
-def double(x: Annotated[int, (0, 100)]) -> int:
-    return x * 2
-
-
-result = double(210)
-print(result)
