@@ -12,6 +12,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
+# lifespan is a context manager that will be called when the app starts and stops
 app = FastAPI(lifespan=lifespan)
 
 
